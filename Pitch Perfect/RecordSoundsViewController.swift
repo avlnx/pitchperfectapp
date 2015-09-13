@@ -21,20 +21,19 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     var recordedAudio:RecordedAudio!
     var session:AVAudioSession!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
-    override func viewWillAppear(animated: Bool) {
+    func resetView()
+    {
         stopButton.hidden = true
         pauseButton.hidden = true
         resumeRecordingButton.hidden = true
         recordButton.enabled = true
         recordingInProgress.text = "Tap to Record"
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        resetView()
     }
 
     @IBAction func recordAudio(sender: UIButton) {
@@ -88,8 +87,12 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         else
         {
             println("Recording was not successful!")
-            recordButton.enabled = true
-            stopButton.hidden = true
+            //Create the AlertController
+            let actionSheetController: UIAlertController = UIAlertController(title: "Alert", message: "Recording not successful! Try again.", preferredStyle: .Alert)
+            //Present the AlertController
+            self.presentViewController(actionSheetController, animated: true, completion: nil)
+            
+            resetView()
         }
     }
     

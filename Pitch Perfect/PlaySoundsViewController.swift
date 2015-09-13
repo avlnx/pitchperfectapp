@@ -30,10 +30,6 @@ class PlaySoundsViewController: UIViewController {
         audioFile = AVAudioFile(forReading: receivedAudio.filePathUrl, error: nil)
         
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
     
     @IBAction func playSnailSound(sender: UIButton) {
         playSound(0.5)
@@ -52,6 +48,8 @@ class PlaySoundsViewController: UIViewController {
     }
     
     @IBAction func playEchoSound(sender: UIButton) {
+        resetPlayersAndEngine()
+        
         // play first sound
         soundPlayer.play()
         
