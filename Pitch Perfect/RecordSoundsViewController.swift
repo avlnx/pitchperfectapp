@@ -14,6 +14,8 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var recordingInProgress: UILabel!
     @IBOutlet weak var stopButton: UIButton!
+    @IBOutlet weak var pauseButton: UIButton!
+    @IBOutlet weak var resumeRecordingButton: UIButton!
     
     var audioRecorder:AVAudioRecorder!
     var recordedAudio:RecordedAudio!
@@ -29,6 +31,8 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     
     override func viewWillAppear(animated: Bool) {
         stopButton.hidden = true
+        pauseButton.hidden = true
+        resumeRecordingButton.hidden = true
         recordButton.enabled = true
         recordingInProgress.text = "Tap to Record"
     }
@@ -37,6 +41,9 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         recordButton.enabled = false
         recordingInProgress.text = "Recording..."
         stopButton.hidden = false
+        pauseButton.hidden = false
+        resumeRecordingButton.hidden = false
+        resumeRecordingButton.enabled = false
         
         let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
         
@@ -53,6 +60,18 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         audioRecorder.meteringEnabled = true
         audioRecorder.prepareToRecord()
         audioRecorder.record()
+    }
+    
+    @IBAction func pauseRecording(sender: UIButton) {
+        audioRecorder.pause()
+        resumeRecordingButton.enabled = true
+        pauseButton.enabled = false
+    }
+    
+    @IBAction func resumeRecording(sender: UIButton) {
+        audioRecorder.record()
+        resumeRecordingButton.enabled = false
+        pauseButton.enabled = true
     }
     
     func audioRecorderDidFinishRecording(recorder: AVAudioRecorder!, successfully flag: Bool) {

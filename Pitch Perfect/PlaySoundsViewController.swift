@@ -12,6 +12,7 @@ import AVFoundation
 class PlaySoundsViewController: UIViewController {
 
     var soundPlayer = AVAudioPlayer()
+    var anotherPlayer = AVAudioPlayer()
     var receivedAudio:RecordedAudio!
     var audioEngine:AVAudioEngine!
     var audioFile:AVAudioFile!
@@ -21,6 +22,9 @@ class PlaySoundsViewController: UIViewController {
         
         soundPlayer = AVAudioPlayer(contentsOfURL: receivedAudio.filePathUrl, error: nil)
         soundPlayer.enableRate = true
+        
+        anotherPlayer = AVAudioPlayer(contentsOfURL: receivedAudio.filePathUrl, error: nil)
+        anotherPlayer.enableRate = true
         
         audioEngine = AVAudioEngine()
         audioFile = AVAudioFile(forReading: receivedAudio.filePathUrl, error: nil)
@@ -47,11 +51,25 @@ class PlaySoundsViewController: UIViewController {
         playAudioWithVariablePitch(-1000)
     }
     
-    func playAudioWithVariablePitch(pitch: Float)
+    @IBAction func playEchoSound(sender: UIButton) {
+        // play first sound
+        soundPlayer.play()
+        
+        // play second sound with delay
+        anotherPlayer.playAtTime(anotherPlayer.deviceCurrentTime + 0.8)
+    }
+    
+    func resetPlayersAndEngine()
     {
         soundPlayer.stop()
+        anotherPlayer.stop()
         audioEngine.stop()
         audioEngine.reset()
+    }
+    
+    func playAudioWithVariablePitch(pitch: Float)
+    {
+        resetPlayersAndEngine()
         
         var audioPlayerNode = AVAudioPlayerNode()
         audioEngine.attachNode(audioPlayerNode)
@@ -70,9 +88,7 @@ class PlaySoundsViewController: UIViewController {
     }
     
     func playSound(rate: Float) {
-        soundPlayer.stop()
-        audioEngine.stop()
-        audioEngine.reset()
+        resetPlayersAndEngine()
         
         soundPlayer.rate = rate
         soundPlayer.currentTime = 0.0
@@ -80,7 +96,7 @@ class PlaySoundsViewController: UIViewController {
     }
     
     @IBAction func stopAudio(sender: UIButton) {
-        soundPlayer.stop()
+        resetPlayersAndEngine()
     }
 
 }
