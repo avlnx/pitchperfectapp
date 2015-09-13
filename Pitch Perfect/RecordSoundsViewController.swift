@@ -82,6 +82,7 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
             session.setCategory(AVAudioSessionCategoryPlayback, error: nil)
         
             // segue
+            //self.performSegueWithIdentifier("stopRecording", sender: nil)
             self.performSegueWithIdentifier("stopRecording", sender: recordedAudio)
         }
         else
